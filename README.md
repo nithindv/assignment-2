@@ -6,7 +6,7 @@
 Simple app to show some basic statistics on the chinook dataset. Database is Postgres, Spring boot for the backend, React for the frontend and deployed on Kubernetes.
 
 ### App
-- Backend app exists to provide statistical data from the database based on externalized config files. App is intended to serve data which would require complex SQL queries, if this is not necessary, better off using OSS libraries such as PGRest etc
+- Backend app exists to provide statistical data from the database based on externalized config files. App is intended to serve data which would require complex SQL queries, if this is not necessary, better off using OSS libraries such as PGRest etc. Sample config file, [Config](https://github.com/nithindv/assignment-2/blob/main/searcher/src/main/resources/chinook.yaml) 
 - Frontend queries the backend and displays the data in the form of simple graphs or counters
 - Deployment manifests templating is handled via Helm; uses a parent common chart to abstract out common repeatable items
 
