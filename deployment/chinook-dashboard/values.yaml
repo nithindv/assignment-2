@@ -1,0 +1,23 @@
+# Common Labels
+labels:
+  app: "chinook-dashboard"
+
+# Ingress Configs
+ingress:
+  enabled: true
+  context: "chinook-dashboard"  
+
+# Container Configs
+image:
+  repository: "nithindv/chinook-dashboard"  
+httpPort: 80  
+replicas: "1"
+healthChecks:
+  enabled: true
+  livenessProbePath: "/chinook-dashboard"
+  readinessProbePath: "/chinook-dashboard"
+  
+# Additional Container Envs
+env: |
+  - name: SERVER_PORT
+    value: "8080"

@@ -1,0 +1,48 @@
+service: chinook
+mappings:
+  - id: sales-by-country
+    version: 1.0
+    description: Fetch sales figures by geography
+    params:
+      - name: country
+        type: STRING
+      - name: city
+        type: STRING
+    query: |
+      SELECT SUM(i.total), i.billing_country FROM invoice_lines il join invoices i on il.invoice_id = i.id JOIN
+      tracks t ON il.track_id = t.id
+      WHERE true
+      {{#country}} AND i.billing_country = :country {{/country}}
+      {{#city}} AND i.billing_city = :city {{/city}}
+      GROUP BY i.billing_country
+
+  - id: sales-by-genre
+    version: 1.0
+    description: Fetch quantity of sales by genre
+    query: |
+      WITH cte AS ( SELECT t.genre_id genre_id, SUM(il.quantity) sum_qty FROM invoice_lines il JOIN tracks t ON il.track_id = t.id GROUP BY t.genre_id )
+      SELECT *, rank() OVER (ORDER BY sum_qty DESC) AS sales_rank
+      FROM cte JOIN genres g ON cte.genre_id = g.id
+      ORDER BY sum_qty DESC
+      LIMIT 10;
+
+  - id: stats
+    version: 1.0
+    description: Fetch stats
+    query: |
+      SELECT  (
+      SELECT sum(i.total)
+      FROM invoice_lines il join invoices i on il.invoice_id = i.id
+      ) AS total_sales,
+      (
+      SELECT SUM(quantity)
+      FROM   invoice_lines
+      ) AS total_quantity,
+      (
+      SELECT COUNT(*)
+      FROM   customers
+      ) AS cust_count,
+      (
+      SELECT COUNT(*)
+      FROM   employees
+      ) AS emp_count;

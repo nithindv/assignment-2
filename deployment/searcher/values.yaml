@@ -1,0 +1,31 @@
+# Common Labels
+labels:
+  app: "searcher"
+
+# Ingress Configs
+ingress:
+  enabled: true
+  context: "searcher"  
+
+# Init Containers Configs
+initContainers:
+  dbMigration:
+    enabled: true
+    schemaTable: "searcher_chinook_sample_schema"
+    image:
+      repository: "searcher-db"
+
+# Container Configs
+image:
+  repository: "nithindv/searcher"  
+replicas: "1"
+appType: "java-spring"
+healthChecks:
+  enabled: true
+  livenessProbePath: "/searcher/health"
+  readinessProbePath: "/searcher/health"
+  
+# Additional Container Envs
+env: |
+  - name: SERVER_PORT
+    value: "8080"
